@@ -1,0 +1,16 @@
+body {
+  padding: 1em 2em;
+  font: 1.2em "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: darkslategray;
+  color: gainsboro;
+}
+
+canvas {
+  background-color: greenyellow;
+  display: block;
+  margin: 1em auto 0px auto;
+}
+
+a {
+  color: #00B7FF;
+}

@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1 Server WebRTC DataChannel Demo
+
+  input(type='hidden', id='server-ip', value=serverIP)
+  input(type='hidden', id='server-port', value=serverPort)
+  input(type='hidden', id='ice-username', value=iceUsername)
+  input(type='hidden', id='ice-password', value=icePassword)
+
+  script(type='text/javascript', src='ServerDataChannel.js')
+  script(type='text/javascript', src='ServerDataChannelDemo.js')
