@@ -20,6 +20,7 @@
 #include <linux/if_tun.h>
 
 #define DEBUG
+#define MTU 1500
 
 struct socket_node {
     struct socket_node* next;
@@ -185,7 +186,7 @@ int get_from_SSL(SN *sn, char *buf, int MAX_BUFFER);
 long send_callback(BIO *wbio, int oper, const char *argp,
                    int argi, long argl, long ret);
 
-BIO *make_socket(unsigned short port, int *sret);
+BIO *make_dtls_socket(unsigned short port, int *sret);
 
 void tickle_sn(SN *sn);
 
@@ -205,11 +206,19 @@ int open_api_socket();
 
 int main(int argc, char **argv);
 
+unsigned int tun_router(struct state *state);
+
 SN * accept_new_sn(struct state *state, struct sockaddr_in *addr, char buf[], int len);
 
 extern int debug(const char *__restrict __format, ...);
 
 void buffer_read(void *dst_buf, size_t dst_len, const char **src, ssize_t *src_len);
+
+void buffer_write(char **dst, size_t *dst_len, const void *src, ssize_t src_len);
+
+uint16_t in_cksum(uint16_t *addr, int len);
+
+uint32_t crc32c(uint32_t c, const uint8_t *buffer, unsigned int length);
 
 static const uint32_t sctp_crc_c[256] = {
 	0x00000000, 0xF26B8303, 0xE13B70F7, 0x1350F3F4,
@@ -278,18 +287,3 @@ static const uint32_t sctp_crc_c[256] = {
 	0xBE2DA0A5, 0x4C4623A6, 0x5F16D052, 0xAD7D5351,
 };
 
-static uint32_t crc32c(uint32_t c,
-                   const uint8_t *buffer,
-                   unsigned int length)
-{
-	unsigned int i;
-
-  c = ~c;
-	for (i = 0; i < length; i++) {
-    uint8_t d = buffer[i];
-    uint8_t idx = (c ^ d) & 0xFF;
-    uint32_t chd = sctp_crc_c[idx];
-    c = (c >> 8) ^ chd;
-	}
-	return ~c;
-}
