@@ -5,12 +5,23 @@ This project is just a proof-of-concept. It contains insecure implementations of
 
 Compile it:
 ```bash
-cd build
-cmake ..
-make
+gcc src/*.c -lssl -lcrypto -o webrtc_server
 ```
 
-Run make_tun.sh in order to to setup the TUN virtual device, then run webrtc_server.
-The demo directory contains a nodejs application to compare websockets latency with webrtc.
+Run make_tun.sh in order to to setup the TUN virtual device, then run webrtc_server:
+```bash
+make_tun.sh
+webrtc_server
+```
 
-Currently this only works with chromium, or maybe not even that.
+After enstablishing the DTLS and SCTP sessions, the payload of SCTP packets from the browser will be mapped onto UDP packets on the TUN device.
+
+The demo directory contains a nodejs application to compare websockets latency with webrtc datachannels. To run it, set the server IP address in demo/routes/index.js, then run the demo:
+```bash
+cd demo
+bin/www
+```
+
+Point your browser to port 4000 to see the demo.
+
+Currently this only works with chromium and google chrome, or maybe not even that.
