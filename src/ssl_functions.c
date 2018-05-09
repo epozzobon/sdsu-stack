@@ -4,7 +4,11 @@ SSL_CTX *create_context() {
   const SSL_METHOD *method;
   SSL_CTX *ctx;
 
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L // OpenSSL 1.1.0
+  method = DTLS_server_method();
+#else
   method = DTLSv1_2_server_method();
+#endif
 
   ctx = SSL_CTX_new(method);
   if (!ctx) {
@@ -23,7 +27,7 @@ int generate_cookie_callback(SSL *ssl, unsigned char *cookie, unsigned int *cook
   return 1; // TODO generate the cookie
 }
 
-int verify_cookie_callback(SSL *ssl, unsigned char *cookie, unsigned int cookie_len) {
+int verify_cookie_callback(SSL *ssl, const unsigned char *cookie, unsigned int cookie_len) {
   return 1; // TODO verify the cookie
 }
 
@@ -31,12 +35,12 @@ void configure_context(SSL_CTX *ctx) {
   SSL_CTX_set_ecdh_auto(ctx, 1);
 
   /* Set the key and cert */
-  if (SSL_CTX_use_certificate_file(ctx, "cert.pem", SSL_FILETYPE_PEM) < 0) {
+  if (SSL_CTX_use_certificate_file(ctx, "cert.pem", SSL_FILETYPE_PEM) != 1) {
     ERR_print_errors_fp(stderr);
     exit(EXIT_FAILURE);
   }
 
-  if (SSL_CTX_use_PrivateKey_file(ctx, "key.pem", SSL_FILETYPE_PEM) < 0 ) {
+  if (SSL_CTX_use_PrivateKey_file(ctx, "key.pem", SSL_FILETYPE_PEM) != 1) {
     ERR_print_errors_fp(stderr);
     exit(EXIT_FAILURE);
   }

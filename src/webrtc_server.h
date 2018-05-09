@@ -166,7 +166,7 @@ SN *getSnFromUsername(const struct state *state, const char *username);
 
 int generate_cookie_callback(SSL *ssl, unsigned char *cookie, unsigned int *cookie_len);
 
-int verify_cookie_callback(SSL *ssl, unsigned char *cookie, unsigned int cookie_len);
+int verify_cookie_callback(SSL *ssl, const unsigned char *cookie, unsigned int cookie_len);
 
 void configure_context(SSL_CTX *ctx);
 

@@ -3,10 +3,13 @@ extends layout
 block content
   h1 Server WebRTC DataChannel Demo
 
+  span(id='latency') No latency data available yet
+
   input(type='hidden', id='server-ip', value=serverIP)
   input(type='hidden', id='server-port', value=serverPort)
   input(type='hidden', id='ice-username', value=iceUsername)
   input(type='hidden', id='ice-password', value=icePassword)
+  input(type='hidden', id='fingerprint', value=fingerprint)
 
   script(type='text/javascript', src='ServerDataChannel.js')
   script(type='text/javascript', src='ServerDataChannelDemo.js')

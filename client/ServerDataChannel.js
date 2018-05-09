@@ -1,6 +1,6 @@
 'use strict';
 
-function setupServerDataChannel(serverIP, serverPort, ufrag, pwd) {
+function setupServerDataChannel(serverIP, serverPort, fingerprint, ufrag, pwd) {
   var endl = "\r\n";
   var offerSdp = {
     type: "offer",
@@ -13,9 +13,11 @@ function setupServerDataChannel(serverIP, serverPort, ufrag, pwd) {
     "a=candidate:0 1 UDP 2000000000 " + serverIP + " " + serverPort + " typ host" + endl +
     "a=ice-ufrag:" + ufrag + endl +
     "a=ice-pwd:" + pwd + endl +
-    "a=fingerprint:sha-256 3F:D2:A2:A6:92:2D:1C:A8:AD:C6:F5:1F:C5:9E:CB:C6:7A:18:9E:2E:C2:59:C5:0A:63:7F:38:02:F0:3C:DC:63" + endl +
+    "a=fingerprint:" + fingerprint + endl +
     ""
   };
+
+	console.log("offerSdp.sdp='" + offerSdp.sdp + "'");
 
   var options = {
     ordered: false,

@@ -146,8 +146,8 @@ unsigned int tun_router(struct state *state) {
 
       } else {
         debug("Ignored UDP packet for port %d\n", udp->destination_port);
-        continue;
       }
+			continue;
     } else if (pkt_hdr->protocol != 132) {
       debug("Packet is not SCTP: %d\n", pkt_hdr->protocol);
       continue;

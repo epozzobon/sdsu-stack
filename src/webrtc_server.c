@@ -56,7 +56,9 @@ SN* make_sn(struct state *state, char *username, char *password) {
   fcntl(fd, F_SETFL, saved_flags | O_NONBLOCK);
 
   SSL_set_options(con, SSL_OP_COOKIE_EXCHANGE);
+#if OPENSSL_VERSION_NUMBER < 0x10100000L // OpenSSL 1.1.0
   con->d1->listen = 1;
+#endif
 
   memset(&new_node->sockaddr, 0, sizeof(new_node->sockaddr));
   uint16_t id = next_socket_node_id++;
@@ -219,6 +221,7 @@ SN *getSnFromSockaddr(const struct state *state, const struct sockaddr_in *fromb
 
 SN *getSnFromTunAddr(const struct state *state, struct in_addr tun_addr) {
   SN *sn;
+	//debug("Getting SN from addr %lx...\n", htonl(tun_addr.s_addr));
   for (sn = state->first; sn != NULL; sn = sn->next) {
     if (sn->tun_addr.s_addr == tun_addr.s_addr) {
       return sn;
